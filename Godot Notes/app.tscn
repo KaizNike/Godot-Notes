@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://7fbqwlt77hmh"]
+
+[ext_resource type="Script" path="res://app.gd" id="1_ossw5"]
+[ext_resource type="PackedScene" uid="uid://cjwjsiruajelx" path="res://window.tscn" id="2_iofw7"]
+
+[node name="App" type="Node"]
+script = ExtResource("1_ossw5")
+note = ExtResource("2_iofw7")
+
+[node name="Window" parent="." instance=ExtResource("2_iofw7")]
+title = "Godot Notes! Main Note"
+
+[node name="LineEdit" parent="Window/VBoxContainer/HBoxContainer" index="1"]
+theme_override_colors/font_color = Color(1, 0.882353, 0, 1)
+theme_override_colors/font_placeholder_color = Color(1, 0.882353, 0, 1)
+
+[editable path="Window"]

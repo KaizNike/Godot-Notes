@@ -11,8 +11,21 @@ config_version=5
 [application]
 
 config/name="Godot Notes"
+run/main_scene="res://app.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://godotnotesicon.png"
+
+[autoload]
+
+Globals="*res://globals.tscn"
+
+[display]
+
+window/size/viewport_width=0
+window/size/viewport_height=0
+window/size/mode=1
+window/size/initial_position_type=3
+window/subwindows/embed_subwindows=false
 
 [rendering]
 
