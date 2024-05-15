@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://blet0tsxx2c2u"]
+
+[node name="CheckListItem" type="HSplitContainer" groups=["checkListItem"]]
+offset_right = 103.0
+offset_bottom = 31.0
+
+[node name="CheckBox" type="CheckBox" parent="."]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "1:"

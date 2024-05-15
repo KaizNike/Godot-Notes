@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjwjsiruajelx"]
+[gd_scene load_steps=3 format=3 uid="uid://cjwjsiruajelx"]
 
 [ext_resource type="Script" path="res://window.gd" id="1_8g44g"]
+[ext_resource type="PackedScene" uid="uid://blet0tsxx2c2u" path="res://check_list_item.tscn" id="2_oiur5"]
 
 [node name="Window" type="Window" groups=["Persist"]]
 title = "Godot Notes!"
@@ -8,8 +9,9 @@ initial_position = 1
 size = Vector2i(250, 250)
 unresizable = true
 script = ExtResource("1_8g44g")
+checkList = ExtResource("2_oiur5")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VSplitContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,12 +19,14 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+dragger_visibility = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
 [node name="AddButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+tooltip_text = "New Note"
 text = " + "
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
@@ -30,20 +34,44 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "First Note"
 
+[node name="CheckButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+tooltip_text = "Add to Checklist"
+text = "*"
+
 [node name="FocusButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Pin on Top"
 toggle_mode = true
 text = " ^ "
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
-custom_minimum_size = Vector2(240, 220)
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
-placeholder_text = "Write on me!             a              a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/ScrollContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+placeholder_text = "This is where all your text goest!
+
++ - New Note
+* - Add Item to Checklist
+^ - Pin Window above all else"
 context_menu_enabled = false
 wrap_mode = 1
 draw_tabs = true
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/FocusButton" to="." method="_on_focus_button_toggled"]

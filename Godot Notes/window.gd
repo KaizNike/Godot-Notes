@@ -2,6 +2,8 @@ extends Window
 
 var child = false
 
+@export var checkList = PackedScene.new()
+var checkItems = 0
 
 func _ready():
 	if not child:
@@ -32,3 +34,23 @@ func _on_close_requested():
 		get_parent().save_notes()
 		pass
 		get_tree().quit(2)
+
+
+func _on_check_button_pressed():
+	var nodes = $VBoxContainer/ScrollContainer/VBoxContainer2.get_children()
+	for node in nodes:
+		if node.is_in_group("checkListItem"):
+			if node.get_node("CheckBox").button_pressed:
+				node.queue_free()
+	var new = checkList.instantiate()
+	checkItems += 1
+	new.get_node("LineEdit").placeholder_text = str(checkItems) + ":"
+	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
+
+
+func add_check_note(text):
+	var new = checkList.instantiate()
+	checkItems += 1
+	new.get_node("LineEdit").placeholder_text = str(checkItems) + ":"
+	new.get_node("LineEdit").text = text
+	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
