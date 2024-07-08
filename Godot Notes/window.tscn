@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjwjsiruajelx"]
+[gd_scene load_steps=4 format=3 uid="uid://cjwjsiruajelx"]
 
 [ext_resource type="Script" path="res://window.gd" id="1_8g44g"]
 [ext_resource type="PackedScene" uid="uid://blet0tsxx2c2u" path="res://check_list_item.tscn" id="2_oiur5"]
+[ext_resource type="Script" path="res://TextEdit.gd" id="3_obcx1"]
 
 [node name="Window" type="Window" groups=["Persist"]]
 title = "Godot Notes!"
@@ -23,12 +24,12 @@ dragger_visibility = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="AddButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="AddNoteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "New Note"
 text = " + "
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="TitleEditor" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Note Title"
@@ -68,11 +69,14 @@ CTRL+S to Save to Docs.
 
 + - New Note
 * - Add Item to Checklist
-^ - Pin Window above all else"
+^ - Pin Window above all else
+F2 - Toggle Speech"
 wrap_mode = 1
 draw_tabs = true
+script = ExtResource("3_obcx1")
 
 [node name="Popup" type="Popup" parent="."]
+title = "Notes saved."
 initial_position = 4
 unresizable = false
 borderless = false
@@ -93,7 +97,10 @@ horizontal_alignment = 1
 wait_time = 8.0
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="gui_focus_changed" from="." to="." method="_on_gui_focus_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddNoteButton" to="." method="_on_add_button_pressed"]
+[connection signal="text_changed" from="VBoxContainer/HBoxContainer/TitleEditor" to="." method="_on_title_editor_text_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/FocusButton" to="." method="_on_focus_button_toggled"]
 [connection signal="timeout" from="PopupTimer" to="." method="_on_popup_timer_timeout"]
