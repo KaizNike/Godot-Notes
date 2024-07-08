@@ -15,10 +15,14 @@ func _ready():
 	Globals.add_note.connect(add_note)
 	#get_tree().set_auto_accept_quit(false)
 	load_notes()
-	var voices = DisplayServer.tts_get_voices()
-	DisplayServer.tts_stop()
-	DisplayServer.tts_speak("Welcome to Godot Notes Accessible. Hold escape to quit. Alt + Tab to switch between notes. Ctrl + S to save a note. Ctrl + Tab to switch within a note. Alt + F4 to clean up a window, but on main window closes. Press F1 to hear this again. " + str(noteNum-1) + " notes loaded." + "This will work strangely with screenreaders as support is not native, so user beware!", voices[0].id,100)
-
+	if Globals.speech:
+		var voices = DisplayServer.tts_get_voices()
+		DisplayServer.tts_stop()
+		DisplayServer.tts_speak("Welcome to Godot Notes Accessible. Hold escape to quit. Alt + Tab to switch between notes. Ctrl + S to save a note. Ctrl + Tab to switch within a note. Alt + F4 to clean up a window, but on main window closes. Press F1 to hear this again. " + str(noteNum-1) + " notes loaded." + "This will work strangely with screenreaders as support is not native, so user beware!", voices[0].id,100)
+	else:
+		var voices = DisplayServer.tts_get_voices()
+		DisplayServer.tts_stop()
+		DisplayServer.tts_speak("F2 to enable speech.", voices[0].id,100)
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -45,7 +49,7 @@ func _input(event):
 		save_notes()
 		root_window.get_node("Popup").show()
 		root_window.get_node("PopupTimer").start()
-	if event.is_action_pressed("help"):
+	if event.is_action_pressed("help") and Globals.speech:
 		var voices = DisplayServer.tts_get_voices()
 		DisplayServer.tts_speak("Reminders. Hold escape to quit. Alt + Tab to switch between notes. Ctrl + S to save a note. Ctrl + Tab to switch within a note. Alt + F4 to clean up a window, but on main window closes. Press F1 to hear this again.", voices[0].id,100)
 
@@ -58,9 +62,10 @@ func _physics_process(delta):
 		if not quitting:
 			quitting = true
 			$QuitPopup.show()
-			var voices = DisplayServer.tts_get_voices()
-			DisplayServer.tts_stop()
-			DisplayServer.tts_speak("Quitting. Holding escape.", voices[0].id,100)
+			if Globals.speech:
+				var voices = DisplayServer.tts_get_voices()
+				DisplayServer.tts_stop()
+				DisplayServer.tts_speak("Quitting. Holding escape.", voices[0].id,100)
 	if quitting:
 		#root_window.grab_focus()
 		$QuitPopup/PanelContainer/VSplitContainer/QuitProgress.value += delta
@@ -69,9 +74,10 @@ func _physics_process(delta):
 		$QuitPopup.hide()
 	if not Input.is_action_pressed("ui_cancel") and quitting:
 		quitting = false
-		var voices = DisplayServer.tts_get_voices()
-		DisplayServer.tts_stop()
-		DisplayServer.tts_speak("Quit cancelled.", voices[0].id,100)
+		if Globals.speech:
+			var voices = DisplayServer.tts_get_voices()
+			DisplayServer.tts_stop()
+			DisplayServer.tts_speak("Quit cancelled.", voices[0].id,100)
 			
 
 
@@ -112,6 +118,7 @@ func save_notes():
 	nodes = get_tree().get_nodes_in_group("Persist")
 	if nodes.size() > 0:
 		var new_save = save.new()
+		new_save.speech = Globals.speech
 		for node in nodes:
 			var save_note = new_save.note.duplicate(true)
 			node.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
@@ -146,6 +153,8 @@ func load_notes():
 		#VERSION CHECK
 		if not versionCheck:
 			compatibility = "V1"
+		if versionCheck >= 4:
+			Globals.speech = saveLoad.speech
 		var notes = saveLoad.save_notes.duplicate(true)
 		if not notes:
 			print("No notes!")

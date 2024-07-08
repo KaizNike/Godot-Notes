@@ -53,10 +53,11 @@ func _on_check_button_pressed():
 	var new = checkList.instantiate()
 	checkItems += 1
 	new.get_node("CheckEditor").tooltip_text = "Checkitem #" + str(checkItems)
-	var voices = DisplayServer.tts_get_voices()
-	DisplayServer.tts_stop()
-	DisplayServer.tts_speak("Check item #" + str(checkItems) + " added.", voices[0].id,100)
-	new.get_node("CheckEditor").placeholder_text = str(checkItems) + ":"
+	if Globals.speech:
+		var voices = DisplayServer.tts_get_voices()
+		DisplayServer.tts_stop()
+		DisplayServer.tts_speak("Check item #" + str(checkItems) + " added.", voices[0].id,100)
+		new.get_node("CheckEditor").placeholder_text = str(checkItems) + ":"
 	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
 	
 func _input(event):
@@ -69,9 +70,17 @@ func _input(event):
 		$Popup.popup()
 		$PopupTimer.start()
 		print("Saved!")
-	if event.is_action_pressed("help"):
+	if event.is_action_pressed("help") and Globals.speech:
 		var voices = DisplayServer.tts_get_voices()
 		DisplayServer.tts_speak("Reminders. Hold escape to quit. Alt + Tab to switch between notes. Ctrl + S to save a note. Ctrl + Tab to switch within a note. Alt + F4 to clean up a window, but on main window closes. Press F1 to hear this again.", voices[0].id,100)
+	if event.is_action_pressed("toggle_speech"):
+		#print("NOW")
+		Globals.speech = !Globals.speech
+		if not Globals.speech:
+			DisplayServer.tts_stop()
+		else:
+			var voices = DisplayServer.tts_get_voices()
+			DisplayServer.tts_speak("Speech on!", voices[0].id,100)
 
 
 
@@ -90,6 +99,8 @@ func _on_popup_timer_timeout():
 
 
 func _on_gui_focus_changed(node):
+	if not Globals.speech:
+		return
 	#var text = $VBoxContainer/HBoxContainer/TitleEditor.text
 	#if not text:
 		#text = $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
@@ -106,15 +117,16 @@ func _on_gui_focus_changed(node):
 
 
 func _on_focus_entered():
-	var text = $VBoxContainer/HBoxContainer/TitleEditor.text
-	if not text:
-		text = "Empty titled note " + $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
-	var voices = DisplayServer.tts_get_voices()
-	DisplayServer.tts_speak(text,voices[0].id,100)
-	$VBoxContainer/HBoxContainer/TitleEditor.grab_focus()
-	text = "Title bar focused."
-	DisplayServer.tts_speak(text,voices[0].id,100)
-	pass # Replace with function body.
+	return
+	#var text = $VBoxContainer/HBoxContainer/TitleEditor.text
+	#if not text:
+		#text = "Empty titled note " + $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
+	#var voices = DisplayServer.tts_get_voices()
+	#DisplayServer.tts_speak(text,voices[0].id,100)
+	#$VBoxContainer/HBoxContainer/TitleEditor.grab_focus()
+	#text = "Title bar focused."
+	##DisplayServer.tts_speak(text,voices[0].id,100)
+	#pass # Replace with function body.
 
 
 func _on_title_editor_text_changed(new_text):

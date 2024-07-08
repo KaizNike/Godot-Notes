@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://cpe1l6c06afa7"]
 
 [ext_resource type="Script" path="res://window.gd" id="1_tf1ab"]
-[ext_resource type="PackedScene" path="res://window.tscn" id="2_ifmij"]
+[ext_resource type="PackedScene" uid="uid://cjwjsiruajelx" path="res://window.tscn" id="2_ifmij"]
 
 [node name="Window" type="Window" groups=["Persist"]]
 title = "Godot Notes! Main Note"
@@ -48,22 +48,14 @@ context_menu_enabled = false
 wrap_mode = 1
 draw_tabs = true
 
-[node name="Window" type="Window" parent="." groups=["Persist"] instance=ExtResource("2_ifmij")]
+[node name="Window" parent="." instance=ExtResource("2_ifmij")]
 title = "Godot Notes! Note #3"
-initial_position = 1
-size = Vector2i(250, 250)
 unresizable = true
-script = ExtResource("1_tf1ab")
 
-[node name="@Window@28" type="Window" parent="." groups=["Persist"] instance=ExtResource("2_ifmij")]
+[node name="@Window@28" parent="." instance=ExtResource("2_ifmij")]
 title = "Godot Notes! Note #5"
-initial_position = 1
-size = Vector2i(250, 250)
 unresizable = true
-script = ExtResource("1_tf1ab")
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/FocusButton" to="." method="_on_focus_button_toggled"]
-[connection signal="close_requested" from="Window" to="Window" method="_on_close_requested"]
-[connection signal="close_requested" from="@Window@28" to="@Window@28" method="_on_close_requested"]
