@@ -6,8 +6,11 @@ extends Node
 var root_window
 var noteNum = 2
 
+var quitting = false
+
 
 func _ready():
+	$QuitPopup.unfocusable = true
 	root_window = $Window
 	Globals.add_note.connect(add_note)
 	#get_tree().set_auto_accept_quit(false)
@@ -24,6 +27,39 @@ func _notification(what):
 		if nodes.size() > 0:
 			save_notes()
 		get_tree().quit(1)
+
+func _input(event):
+	#print(quitting)
+	#if event.is_action_released("quit") and quitting:
+		#quitting = false
+		#print("STEP2")
+	#if event.is_action_pressed("quit") and not quitting:
+		#$QuitPopup.popup()
+		#print("STEP1")
+		#quitting = true
+	if event.is_action_pressed("save"):
+		print("save started!")
+		save_notes()
+		root_window.get_node("Popup").show()
+		root_window.get_node("PopupTimer").start()
+		
+
+
+func _physics_process(delta):
+	#print(Input.is_action_pressed("ui_cancel"))
+	if Input.is_action_pressed("ui_cancel"):
+		if not quitting:
+			quitting = true
+			$QuitPopup.show()
+	if quitting:
+		#root_window.grab_focus()
+		$QuitPopup/PanelContainer/VSplitContainer/QuitProgress.value += delta
+	else:
+		$QuitPopup/PanelContainer/VSplitContainer/QuitProgress.value = 0
+		$QuitPopup.hide()
+	if not Input.is_action_pressed("ui_cancel"):
+		quitting = false
+			
 
 func add_note():
 	var new_note = note.instantiate()
@@ -139,3 +175,10 @@ func load_notes():
 			pass
 	print(noteNum-1, " Notes loaded:")
 	pass
+
+
+func _on_progress_bar_value_changed(value):
+	print(value)
+	if value == $QuitPopup/PanelContainer/VSplitContainer/QuitProgress.max_value:
+		save_notes()
+		get_tree().quit(3)

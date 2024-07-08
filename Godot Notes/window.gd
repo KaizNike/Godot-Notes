@@ -6,6 +6,8 @@ var child = false
 var checkItems = 0
 
 func _ready():
+	#$Popup.popup()
+	#$PopupTimer.start()
 	if not child:
 		#$VBoxContainer/HBoxContainer/LineEdit.theme_override_colors.font_color = Color("#ffe100")
 		#$VBoxContainer/HBoxContainer/LineEdit.theme_override_colors.font_placeholder_color = Color("#ffe100")
@@ -44,13 +46,32 @@ func _on_check_button_pressed():
 				node.queue_free()
 	var new = checkList.instantiate()
 	checkItems += 1
+	new.get_node("LineEdit").tooltip_text = "Checkitem #" + str(checkItems)
 	new.get_node("LineEdit").placeholder_text = str(checkItems) + ":"
 	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
+	
+func _input(event):
+	if event.is_action_pressed("save"):
+		print("Inner save.")
+		var parent = get_parent()
+		if parent is Window:
+			parent = parent.get_parent()
+		parent.save_notes()
+		$Popup.popup()
+		$PopupTimer.start()
+		print("Saved!")
+		
 
 
 func add_check_note(text):
 	var new = checkList.instantiate()
 	checkItems += 1
+	new.get_node("LineEdit").tooltip_text = "Checkitem #" + str(checkItems)
 	new.get_node("LineEdit").placeholder_text = str(checkItems) + ":"
 	new.get_node("LineEdit").text = text
 	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
+
+
+func _on_popup_timer_timeout():
+	$Popup.hide()
+	pass # Replace with function body.

@@ -7,7 +7,6 @@
 title = "Godot Notes!"
 initial_position = 1
 size = Vector2i(250, 250)
-unresizable = true
 script = ExtResource("1_8g44g")
 checkList = ExtResource("2_oiur5")
 
@@ -32,6 +31,7 @@ text = " + "
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Note Title"
 placeholder_text = "First Note"
 
 [node name="CheckButton" type="Button" parent="VBoxContainer/HBoxContainer"]
@@ -62,16 +62,38 @@ custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
-placeholder_text = "This is where all your text goest!
+tooltip_text = "Note Body - Write Here!"
+placeholder_text = "Text goest here!
+CTRL+S to Save to Docs.
 
 + - New Note
 * - Add Item to Checklist
 ^ - Pin Window above all else"
-context_menu_enabled = false
 wrap_mode = 1
 draw_tabs = true
+
+[node name="Popup" type="Popup" parent="."]
+initial_position = 4
+unresizable = false
+borderless = false
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Popup/PanelContainer"]
+layout_mode = 2
+text = "Saved"
+horizontal_alignment = 1
+
+[node name="PopupTimer" type="Timer" parent="."]
+wait_time = 8.0
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/FocusButton" to="." method="_on_focus_button_toggled"]
+[connection signal="timeout" from="PopupTimer" to="." method="_on_popup_timer_timeout"]
