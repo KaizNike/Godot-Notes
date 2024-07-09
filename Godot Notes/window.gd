@@ -70,6 +70,10 @@ func _input(event):
 		$Popup.popup()
 		$PopupTimer.start()
 		print("Saved!")
+		if Globals.speech:
+			DisplayServer.tts_stop()
+			var voices = DisplayServer.tts_get_voices()
+			DisplayServer.tts_speak("Notes saved!", voices[0].id,100)
 	if event.is_action_pressed("help") and Globals.speech:
 		var voices = DisplayServer.tts_get_voices()
 		DisplayServer.tts_speak("Reminders. Hold escape to quit. Alt + Tab to switch between notes. Ctrl + S to save a note. Ctrl + Tab to switch within a note. Alt + F4 to clean up a window, but on main window closes. Press F1 to hear this again.", voices[0].id,100)
