@@ -85,6 +85,12 @@ func _input(event):
 		else:
 			var voices = DisplayServer.tts_get_voices()
 			DisplayServer.tts_speak("Speech on!", voices[0].id,100)
+	if event.is_action_pressed("new_note"):
+		_on_add_button_pressed()
+	if event.is_action_pressed("new_checkbox"):
+		add_check_note("")
+	if event.is_action_pressed("pin"):
+		$VBoxContainer/HBoxContainer/FocusButton.button_pressed = !$VBoxContainer/HBoxContainer/FocusButton.button_pressed
 
 
 
@@ -121,16 +127,16 @@ func _on_gui_focus_changed(node):
 
 
 func _on_focus_entered():
-	return
-	#var text = $VBoxContainer/HBoxContainer/TitleEditor.text
-	#if not text:
-		#text = "Empty titled note " + $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
-	#var voices = DisplayServer.tts_get_voices()
+	#return
+	var text = $VBoxContainer/HBoxContainer/TitleEditor.text
+	if not text:
+		text = "Empty titled note " + $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
+	var voices = DisplayServer.tts_get_voices()
+	DisplayServer.tts_speak(text,voices[0].id,100)
+	$VBoxContainer/HBoxContainer/TitleEditor.grab_focus()
+	text = "Title bar focused."
 	#DisplayServer.tts_speak(text,voices[0].id,100)
-	#$VBoxContainer/HBoxContainer/TitleEditor.grab_focus()
-	#text = "Title bar focused."
-	##DisplayServer.tts_speak(text,voices[0].id,100)
-	#pass # Replace with function body.
+	pass # Replace with function body.
 
 
 func _on_title_editor_text_changed(new_text):

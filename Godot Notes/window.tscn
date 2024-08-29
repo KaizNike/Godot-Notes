@@ -64,12 +64,11 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 tooltip_text = "Note Body - Write Here!"
-placeholder_text = "Text goest here!
-CTRL+S to Save to Docs.
-
+placeholder_text = "Type here! Ctrl + S saves.
+Ctrl + Tab/Ctrl + Shift Tab to Navigate
 + - New Note
 * - Add Item to Checklist
-^ - Pin Window above all else
+^ - Pin Window to top
 F2 - Toggle Speech"
 wrap_mode = 1
 draw_tabs = true

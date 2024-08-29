@@ -14,7 +14,12 @@ func _ready():
 	root_window = $Window
 	Globals.add_note.connect(add_note)
 	#get_tree().set_auto_accept_quit(false)
-	load_notes()
+	DisplayServer.tts_pause()
+	var check = load_notes()
+	if check and Globals.is_speech_option_loaded and Globals.queue_speech:
+		Globals.speech = true
+	if not Globals.is_speech_option_loaded:
+		Globals.speech = true
 	if Globals.speech:
 		var voices = DisplayServer.tts_get_voices()
 		DisplayServer.tts_stop()
@@ -142,72 +147,74 @@ func save_notes():
 	pass
 
 
-func load_notes():
+func load_notes() -> bool:
 	var compatibility = ""
 	var saveLoad = ResourceLoader.load("user://notes.tres")
 	#var root_window = $Window
 	if not saveLoad:
 		print("Load error!")
-	else:
-		var versionCheck = saveLoad.version_iteration
-		#VERSION CHECK
-		if not versionCheck:
-			compatibility = "V1"
-		if versionCheck >= 4:
-			Globals.speech = saveLoad.speech
-		var notes = saveLoad.save_notes.duplicate(true)
-		if not notes:
-			print("No notes!")
-		else:
+		return false
+	var versionCheck = saveLoad.version_iteration
+	#VERSION CHECK
+	if not versionCheck:
+		compatibility = "V1"
+	if versionCheck >= 4:
+		Globals.queue_speech = saveLoad.speech
+		Globals.is_speech_option_loaded = true
+	var notes = saveLoad.save_notes.duplicate(true)
+	if not notes:
+		print("No notes!")
+		return false
 #Iterate over notes, check first if child then move to screen
-			for noteI in notes:
-				if noteI.child == false:
-					root_window.queue_free()
-					noteNum = 1
-					var new_note = note.instantiate()
-					#new_note.child = true
-					#new_note.transient = true
-					new_note.title = "Godot Notes! Main Note" + ": " + noteI.title
-					new_note.window_name = "Godot Notes! Main Note"
-					new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").text = noteI.title
-					new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").placeholder_text = "First Note"
-					new_note.get_node("VBoxContainer/ScrollContainer/VBoxContainer2/TextEdit").text = noteI.text
-					new_note.get_node("VBoxContainer/HBoxContainer/FocusButton").button_pressed = noteI.focused
-					if not compatibility == "V1":
-						for item in noteI.checkboxes:
-							new_note.add_check_note(item)
-					if not compatibility == "V1" and versionCheck >= 3:
-						new_note.size = noteI.size
-					new_note.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
-					new_note.position = noteI.pos
-					add_child(new_note)
-					root_window = new_note
-					noteNum += 1
-			for noteI in notes:
-				if noteI.child == true:
-						#root_window.queue_free()
-						#noteNum = 1
-						var new_note = note.instantiate()
-						#new_note.child = true
-						#new_note.transient = true
-						new_note.title = "Godot Notes! Note #" + str(noteNum) + ": " + noteI.title 
-						new_note.window_name = "Godot Notes! Note #" + str(noteNum)
-						new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").text = noteI.title
-						new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").placeholder_text = "Note #" + str(noteNum)
-						new_note.get_node("VBoxContainer/ScrollContainer/VBoxContainer2/TextEdit").text = noteI.text
-						new_note.get_node("VBoxContainer/HBoxContainer/FocusButton").button_pressed = noteI.focused
-						if not compatibility == "V1":
-							for item in noteI.checkboxes:
-								new_note.add_check_note(item)
-						if not compatibility == "V1" and versionCheck >= 3:
-							new_note.size = noteI.size
-						new_note.child = noteI.child
-						new_note.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
-						new_note.position = noteI.pos
-						root_window.add_child(new_note)
-						noteNum += 1
-			pass
+	for noteI in notes:
+		if noteI.child == false:
+			root_window.queue_free()
+			noteNum = 1
+			var new_note = note.instantiate()
+			#new_note.child = true
+			#new_note.transient = true
+			new_note.title = "Godot Notes! Main Note" + ": " + noteI.title
+			new_note.window_name = "Godot Notes! Main Note"
+			new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").text = noteI.title
+			new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").placeholder_text = "First Note"
+			new_note.get_node("VBoxContainer/ScrollContainer/VBoxContainer2/TextEdit").text = noteI.text
+			new_note.get_node("VBoxContainer/HBoxContainer/FocusButton").button_pressed = noteI.focused
+			if not compatibility == "V1":
+				for item in noteI.checkboxes:
+					new_note.add_check_note(item)
+			if not compatibility == "V1" and versionCheck >= 3:
+				new_note.size = noteI.size
+			new_note.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
+			new_note.position = noteI.pos
+			add_child(new_note)
+			root_window = new_note
+			noteNum += 1
+	for noteI in notes:
+		if noteI.child == true:
+			#root_window.queue_free()
+			#noteNum = 1
+			var new_note = note.instantiate()
+			#new_note.child = true
+			#new_note.transient = true
+			new_note.title = "Godot Notes! Note #" + str(noteNum) + ": " + noteI.title 
+			new_note.window_name = "Godot Notes! Note #" + str(noteNum)
+			new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").text = noteI.title
+			new_note.get_node("VBoxContainer/HBoxContainer/TitleEditor").placeholder_text = "Note #" + str(noteNum)
+			new_note.get_node("VBoxContainer/ScrollContainer/VBoxContainer2/TextEdit").text = noteI.text
+			new_note.get_node("VBoxContainer/HBoxContainer/FocusButton").button_pressed = noteI.focused
+			if not compatibility == "V1":
+				for item in noteI.checkboxes:
+					new_note.add_check_note(item)
+			if not compatibility == "V1" and versionCheck >= 3:
+				new_note.size = noteI.size
+			new_note.child = noteI.child
+			new_note.initial_position = Window.WINDOW_INITIAL_POSITION_ABSOLUTE
+			new_note.position = noteI.pos
+			root_window.add_child(new_note)
+			noteNum += 1
+	pass
 	print(noteNum-1, " Notes loaded:")
+	return true
 	pass
 
 

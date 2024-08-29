@@ -10,6 +10,14 @@ note = ExtResource("2_iofw7")
 [node name="Window" parent="." instance=ExtResource("2_iofw7")]
 title = "Godot Notes! Main Note"
 
+[node name="TextEdit" parent="Window/VBoxContainer/ScrollContainer/VBoxContainer2" index="0"]
+placeholder_text = "Type here! Ctrl S saves.
+Naviagate with Ctrl Tab
+Ctrl Shift + - New Note
+Ctrl Shift * - Checklist item
+Ctrl Shift ^ - Pin Window
+F2 - Toggle Speech"
+
 [node name="QuitPopup" type="Popup" parent="."]
 initial_position = 4
 borderless = false
