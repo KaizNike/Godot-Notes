@@ -11,6 +11,7 @@ var quitting = false
 
 func _ready():
 	$QuitPopup.unfocusable = true
+	$SpeechPopup.unfocusable = true
 	root_window = $Window
 	Globals.add_note.connect(add_note)
 	#get_tree().set_auto_accept_quit(false)
@@ -49,6 +50,8 @@ func _input(event):
 		#$QuitPopup.popup()
 		#print("STEP1")
 		#quitting = true
+	if event.is_action_pressed("toggle_speech"):
+		show_speech_popup()
 	if event.is_action_pressed("save"):
 		print("save started!")
 		save_notes()
@@ -85,6 +88,13 @@ func _physics_process(delta):
 			DisplayServer.tts_speak("Quit cancelled.", voices[0].id,100)
 			
 
+
+func show_speech_popup():
+	if Globals.speech:
+		$SpeechPopup/PanelContainer/VSplitContainer/Label.text = "Speech: ON"
+	else:
+		$SpeechPopup/PanelContainer/VSplitContainer/Label.text = "Speech: OFF"
+	$SpeechPopup.popup()
 
 #func is_screen_reader_active():
 	#return DisplayServer.get_accessibility()

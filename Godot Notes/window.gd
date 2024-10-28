@@ -85,6 +85,10 @@ func _input(event):
 		else:
 			var voices = DisplayServer.tts_get_voices()
 			DisplayServer.tts_speak("Speech on!", voices[0].id,100)
+		var parent = get_parent()
+		if parent is Window:
+			parent = parent.get_parent()
+		parent.show_speech_popup()
 	if event.is_action_pressed("new_note"):
 		_on_add_button_pressed()
 	if event.is_action_pressed("new_checkbox"):
