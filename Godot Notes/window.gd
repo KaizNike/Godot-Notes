@@ -127,7 +127,8 @@ func _on_gui_focus_changed(node):
 
 
 func _on_focus_entered():
-	#return
+	if not Globals.speech:
+		return
 	var text = $VBoxContainer/HBoxContainer/TitleEditor.text
 	if not text:
 		text = "Empty titled note " + $VBoxContainer/HBoxContainer/TitleEditor.placeholder_text
@@ -135,7 +136,7 @@ func _on_focus_entered():
 	DisplayServer.tts_speak(text,voices[0].id,100)
 	$VBoxContainer/HBoxContainer/TitleEditor.grab_focus()
 	text = "Title bar focused."
-	#DisplayServer.tts_speak(text,voices[0].id,100)
+	DisplayServer.tts_speak(text,voices[0].id,100)
 	pass # Replace with function body.
 
 
