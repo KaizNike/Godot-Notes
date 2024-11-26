@@ -69,6 +69,10 @@ text = "Speech: OFF"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Timer" type="Timer" parent="SpeechPopup"]
+wait_time = 8.0
+
 [connection signal="value_changed" from="QuitPopup/PanelContainer/VSplitContainer/QuitProgress" to="." method="_on_progress_bar_value_changed"]
+[connection signal="timeout" from="SpeechPopup/Timer" to="." method="_on_timer_timeout"]
 
 [editable path="Window"]

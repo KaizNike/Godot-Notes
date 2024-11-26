@@ -90,6 +90,7 @@ func _physics_process(delta):
 
 
 func show_speech_popup():
+	$SpeechPopup/Timer.start()
 	if Globals.speech:
 		$SpeechPopup/PanelContainer/VSplitContainer/Label.text = "Speech: ON"
 	else:
@@ -233,3 +234,8 @@ func _on_progress_bar_value_changed(value):
 	if value == $QuitPopup/PanelContainer/VSplitContainer/QuitProgress.max_value:
 		save_notes()
 		get_tree().quit(3)
+
+
+func _on_timer_timeout():
+	$SpeechPopup.hide()
+	pass # Replace with function body.
