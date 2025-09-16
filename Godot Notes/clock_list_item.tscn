@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcy324tvyg3hu"]
+
+[ext_resource type="Texture2D" uid="uid://pj085wcb2ghn" path="res://icon.svg" id="1_6guvc"]
+[ext_resource type="Script" uid="uid://deblooihce7k2" path="res://clock_list_item.gd" id="1_g1frs"]
+
+[node name="clock_list_item" type="HBoxContainer" groups=["clockListItem"]]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_g1frs")
+
+[node name="ProgressBar" type="TextureProgressBar" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+accessibility_name = "Countdown Radial"
+accessibility_description = "Shows visually the progress when the timer is up. If that is not useful, a voice will play also."
+accessibility_live = 2
+value = 100.0
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("1_6guvc")
+
+[node name="Time" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Just type a number and a time, seconds, minutes, hours, days, weeks, months, years, supported if that much time goes by it will finish."
+accessibility_name = "Time Control Editor"
+accessibility_description = "Just type a number and a time, seconds, minutes, hours, days, weeks, months, years, supported if that much time goes by it will finish."
+placeholder_text = "5 minutes"
+
+[node name="StartReset" type="Button" parent="."]
+layout_mode = 2
+tooltip_text = "Starts or resets the timer."
+accessibility_name = "Start / Reset Button"
+accessibility_description = "Depending if the timer is started or not, starts or resets it."
+text = "start"
+
+[connection signal="pressed" from="StartReset" to="." method="_on_start_reset_pressed"]

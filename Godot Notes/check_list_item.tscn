@@ -6,8 +6,14 @@ offset_bottom = 31.0
 
 [node name="CheckBox" type="CheckBox" parent="."]
 layout_mode = 2
-tooltip_text = "Check when done!"
+tooltip_text = "Check when done! Then will clean itself when a new item is added or notes are closed."
+accessibility_name = "Checklist Toggle Switch"
+accessibility_description = "When toggled it means the text to the right is complete, and will be left to delete unless unchecked."
+accessibility_live = 1
 
 [node name="CheckEditor" type="LineEdit" parent="."]
 layout_mode = 2
+accessibility_name = "Check Item Editor"
+accessibility_description = "This is where you enter the info you want for this check item, this will go away once toggle is switched on and notes exited or a new item added."
+accessibility_live = 1
 placeholder_text = "1:"

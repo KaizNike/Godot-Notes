@@ -3,6 +3,7 @@ extends Window
 var child = false
 
 @export var checkList = PackedScene.new()
+@export var clockList = PackedScene.new()
 var checkItems = 0
 
 var window_name = ""
@@ -60,6 +61,16 @@ func _on_check_button_pressed():
 		new.get_node("CheckEditor").placeholder_text = str(checkItems) + ":"
 	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
 	
+	
+func _on_clock_button_pressed() -> void:
+	var new = clockList.instantiate()
+	if Globals.speech:
+		var voices = DisplayServer.tts_get_voices()
+		DisplayServer.tts_stop()
+		DisplayServer.tts_speak("Timer added, press start on it once you enter the right time, default time is 5 minutes.", voices[0].id,100)
+	$VBoxContainer/ScrollContainer/VBoxContainer2.add_child(new)
+
+
 func _input(event):
 	if event.is_action_pressed("save"):
 		print("Inner save.")
