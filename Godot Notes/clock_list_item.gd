@@ -62,3 +62,8 @@ func _process(delta: float) -> void:
 	if started:
 		$ProgressBar.value -= delta
 		print($ProgressBar.value)
+
+
+func time_since():
+	
+	pass
