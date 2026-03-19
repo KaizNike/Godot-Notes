@@ -1,13 +1,37 @@
 [gd_scene format=3 uid="uid://blet0tsxx2c2u"]
 
-[node name="CheckListItem" type="HSplitContainer" groups=["checkListItem"]]
+[ext_resource type="Script" uid="uid://bwshiywfbwh2o" path="res://check_list_item.gd" id="1_thpti"]
+
+[node name="CheckListItem" type="HSplitContainer" unique_id=884152212 groups=["checkListItem"]]
 offset_right = 103.0
 offset_bottom = 31.0
+split_offsets = PackedInt32Array(24, 122)
+split_offset = 24
+script = ExtResource("1_thpti")
 
-[node name="CheckBox" type="CheckBox" parent="."]
+[node name="CheckBox" type="CheckBox" parent="." unique_id=553686535]
 layout_mode = 2
 tooltip_text = "Check when done!"
 
-[node name="CheckEditor" type="LineEdit" parent="."]
+[node name="TimeBox" type="SpinBox" parent="." unique_id=1404911926]
 layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Type a time in seconds and press enter!"
+max_value = 25000.0
+value = 60.0
+rounded = true
+allow_greater = true
+update_on_text_changed = true
+custom_arrow_step = 15.0
+custom_arrow_round = true
+select_all_on_focus = true
+
+[node name="Timer" type="Timer" parent="TimeBox" unique_id=212253949]
+
+[node name="CheckEditor" type="LineEdit" parent="." unique_id=25674930]
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "1:"
+
+[connection signal="gui_input" from="TimeBox" to="." method="_on_time_box_gui_input"]
+[connection signal="timeout" from="TimeBox/Timer" to="." method="_on_timer_timeout"]

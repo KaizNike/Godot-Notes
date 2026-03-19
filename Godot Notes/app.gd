@@ -226,7 +226,6 @@ func load_notes() -> bool:
 	pass
 	print(noteNum-1, " Notes loaded:")
 	return true
-	pass
 
 
 func _on_progress_bar_value_changed(value):
